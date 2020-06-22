@@ -6,6 +6,7 @@
   "author": "iwanbazz <iwan.bazz@gmail.com>",
   "private": true,
   "scripts": {
+    "qdev": "QENV=development quasar dev",
     "lint": "eslint --ext .js,.vue ./",
     "test": "echo \"No test specified\" && exit 0"
   },
