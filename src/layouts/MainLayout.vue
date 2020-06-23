@@ -1,7 +1,7 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-header>
-      <q-toolbar>
+      <q-toolbar padding>
         <q-btn
           flat
           dense
@@ -10,6 +10,8 @@
           aria-label="Menu"
           @click="leftDrawerOpen = !leftDrawerOpen"
         />
+        <q-toolbar-title></q-toolbar-title>
+        <q-btn flat dense round @click="logoutUser()" icon="logout" />
       </q-toolbar>
       <div class="q-px-lg q-pt-xl q-mb-md">
         <div class="text-h3">Todo</div>
@@ -53,11 +55,11 @@
         <div class="absolute-bottom bg-transparent">
           <q-avatar size="56px" class="q-mb-sm">
             <img
-              src="https://en.gravatar.com/userimage/123243374/97458cdc11510bb2acd0fe56a9c8a038.jpeg"
+              src="https://en.gravatar.com/userimage/123243374/7bbd297c320ad6ca79addb30bbb3b56b.png"
             />
           </q-avatar>
-          <div class="text-weight-bold">Akhmad Ridwan</div>
-          <div>@iwanbazz</div>
+          <div class="text-weight-bold">User</div>
+          <div>{{ currentEmail }}</div>
         </div>
       </q-img>
     </q-drawer>
@@ -71,11 +73,17 @@
 </template>
 
 <script>
-import { date } from 'quasar';
+import { date } from "quasar";
+import { mapActions } from "vuex";
+import firebaseService from "../services/firebase";
 // import EssentialLink from 'components/EssentialLink.vue';
 
 export default {
-  name: 'MainLayout',
+  name: "MainLayout",
+
+  methods: {
+    ...mapActions("auth", ["logoutUser"])
+  },
 
   components: {
     //EssentialLink
@@ -133,7 +141,12 @@ export default {
   computed: {
     todaysDate() {
       let timeStamp = Date.now();
-      return date.formatDate(timeStamp, 'dddd D MMMM YYYY');
+      return date.formatDate(timeStamp, "dddd D MMMM YYYY");
+    },
+    currentEmail() {
+      let loginUser = firebaseService.auth().currentUser;
+      console.log(loginUser.email);
+      return loginUser.email;
     }
   }
 };
