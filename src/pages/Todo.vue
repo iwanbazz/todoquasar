@@ -57,10 +57,14 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
-      newTask: '',
+      todos: [],
+      errors: [],
+      newTask: "",
       tasks: [
         // {
         //   title: 'Get mango',
@@ -77,25 +81,39 @@ export default {
       ]
     };
   },
+
+  created() {
+    axios
+      .get(`https://quasar-5d950.et.r.appspot.com/todo`)
+      .then(response => {
+        // JSON responses are automatically parsed.
+        this.todos = response.data;
+        console.log(response.data);
+      })
+      .catch(e => {
+        this.errors.push(e);
+      });
+  },
+
   methods: {
     addTask() {
       this.tasks.push({
         title: this.newTask,
         done: false
       });
-      this.newTask = '';
+      this.newTask = "";
     },
     deleteTask(index) {
       this.$q
         .dialog({
-          title: 'Confirm',
-          message: 'Would you like to delete this task ?',
+          title: "Confirm",
+          message: "Would you like to delete this task ?",
           cancel: true,
           persistent: true
         })
         .onOk(() => {
           this.tasks.splice(index, 1);
-          this.$q.notify('Task deleted');
+          this.$q.notify("Task deleted");
         });
     }
   }
